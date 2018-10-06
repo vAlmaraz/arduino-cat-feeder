@@ -27,6 +27,7 @@
 Servo myservo;
 
 const int PIN_SERVO_AUTO_FEED = 9;
+const int PIN_BUTTON_MANUAL_FEED = 2;
 const int DEFAULT_AUTO_FEED_UNITS = 2;
 
 const bool SHOW_LOG = true;
@@ -39,6 +40,7 @@ void setup() {
   }
   setupClock();
   setupServo();
+  setupMisc();
 }
 
 void loop() {
@@ -46,6 +48,12 @@ void loop() {
     digitalClockDisplay();
   }
   Alarm.delay(1000);
+  int buttonState = digitalRead(PIN_BUTTON_MANUAL_FEED);
+  showLog("Button state: " + buttonState);
+  if (buttonState == HIGH) {
+    showLog("Button pressed");
+    feedOneUnit();
+  }
 }
 
 // SETUPS
@@ -62,6 +70,10 @@ void setupServo() {
   myservo.write(180);
   delay(1000);
   myservo.detach();
+}
+
+void setupMisc() {
+  pinMode(PIN_BUTTON_MANUAL_FEED, INPUT);
 }
 
 // ALARMS
